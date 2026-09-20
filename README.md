@@ -1,1 +1,0 @@
-# fara7-hamo-nagwa.
