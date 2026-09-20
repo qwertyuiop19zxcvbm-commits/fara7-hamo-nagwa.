@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>دعوة زفاف حمو ونجوى</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- html2canvas for downloading the card -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Google Fonts for Elegant Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-rose: #be185d; /* Rose 700 */
+            --light-pink: #fdf2f8; /* Pink 50 */
+            --accent-gold: #d4af37;
+            --text-dark: #4c1d95;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--light-pink);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-elegant { font-family: 'Aref Ruqaa', serif; }
+        .font-classic { font-family: 'Amiri', serif; }
+
+        /* View Management */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            min-height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .view-section.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Elegant Buttons */
+        .btn-rose {
+            background: linear-gradient(135deg, #be185d 0%, #9f1239 100%);
+            color: white;
+            border-radius: 999px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            box-shadow: 0 4px 15px rgba(190, 24, 93, 0.3);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .btn-rose:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(190, 24, 93, 0.4); }
+        .btn-rose:active { transform: scale(0.98); }
+        .btn-rose:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            cursor: not-allowed;
+            color: #64748b;
+            transform: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-rose);
+            border: 2px solid var(--primary-rose);
+            box-shadow: none;
+        }
+        .btn-outline:hover { background: #fce7f3; }
+
+        /* Inputs */
+        .input-field {
+            width: 100%;
+            border: 2px solid #fbcfe8;
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-rose);
+            box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.1);
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-rose);
+            border: 1px solid var(--primary-rose);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 50;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: var(--primary-rose); color: white; }
+
+        #visitor-animation {
+            background: radial-gradient(circle at center, #2a1625 0%, #11090f 100%);
+            overflow: hidden;
+            color: white;
+        }
+
+        .candle-wrapper {
+            position: relative;
+            z-index: 10;
+            margin-top: -50px;
+        }
+
+        .candle {
+            width: 50px;
+            height: 120px;
+            background: linear-gradient(to right, #fdf5e6 0%, #fff 50%, #fdf5e6 100%);
+            border-radius: 6px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1);
+        }
+
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: -5px; left: 0;
+            width: 100%; height: 10px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .wick {
+            width: 4px; height: 15px;
+            background: #333;
+            position: absolute;
+            top: -15px; left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .flame {
+            width: 20px; height: 35px;
+            background: #ff9d00;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -45px; left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #ff9d00, 0 0 50px #ff6a00, 0 0 80px #ffcc00;
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
+        }
+
+        .flame.lit {
+            opacity: 1;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-1deg); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.05) rotate(1deg); opacity: 1; }
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+            animation: floatUp 4s infinite linear;
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .glowing-names {
+            font-size: 3.5rem;
+            color: #fce7f3;
+            text-shadow: 0 0 15px rgba(252, 231, 243, 0.8), 0 0 30px rgba(190, 24, 93, 0.6);
+            opacity: 0;
+            text-align: center;
+            margin-top: 2rem;
+            z-index: 10;
+            transition: opacity 2s ease-in;
+        }
+        .glowing-names.show { opacity: 1; }
+
+        .digital-card {
+            background: white;
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 3/4.2;
+            position: relative;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(190, 24, 93, 0.15);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(circle at center, #fff 40%, #fdf2f8 100%);
+            border: 8px solid white;
+        }
+        
+        .card-border-inner {
+            position: absolute;
+            top: 10px; bottom: 10px; left: 10px; right: 10px;
+            border: 2px dashed #fbcfe8;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .flower-dec {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-rose);
+        }
+
+        .hidden { display: none !important; }
+        
+        .designer-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            width: 100%;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" src="دي_ليلتنا.mp3" preload="auto" loop></audio>
+
+    <!-- Global Back Button -->
+    <button id="back-btn" class="back-btn hidden" onclick="goBack()">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        رجوع
+    </button>
+
+    <!-- 1. Main Menu -->
+    <div id="main-menu" class="view-section active">
+        <div class="text-center mb-12">
+            <h1 class="font-elegant text-5xl md:text-6xl text-rose-800 mb-4">فرحتنا</h1>
+            <p class="text-rose-600 font-classic text-lg">أهلاً بكم في صفحة دعوتنا</p>
+        </div>
+        <div class="w-full max-w-sm flex flex-col gap-4">
+            <button onclick="handleInitialInteraction(); navigate('visitor-start')" class="btn-rose mx-auto">زائر</button>
+            <button onclick="handleInitialInteraction(); navigate('host-login')" class="btn-rose btn-outline mx-auto">عريس أو عروسة</button>
+        </div>
+        <div class="designer-footer absolute bottom-0">
+            <p class="text-sm text-gray-500">تم التصميم بواسطة Pixel lab</p>
+            <p class="text-sm text-gray-500 mt-1">للتواصل <a href="https://wa.me/201559087112" target="_blank" class="text-rose-600 font-bold underline hover:text-rose-800">اضغط هنا</a></p>
+        </div>
+    </div>
+
+    <!-- 2. Visitor Start -->
+    <div id="visitor-start" class="view-section">
+        <div class="max-w-md w-full bg-white p-8 rounded-[2rem] shadow-xl border border-pink-100 text-center relative z-10">
+            <div class="text-4xl mb-4">🌹</div>
+            <h2 class="font-elegant text-3xl mb-4 text-rose-800">مرحباً بك</h2>
+            <p class="text-gray-600 mb-8 font-classic text-lg">يسعدنا ويشرفنا حضورك ومشاركتك فرحتنا.</p>
+            <button onclick="startAnimation()" class="btn-rose w-full text-xl py-4 mx-auto block shadow-pink-200 shadow-lg">اضغط لبدء الدعوة</button>
+        </div>
+        <div class="designer-footer">
+            <p class="text-sm text-gray-500">تم التصميم بواسطة Pixel lab</p>
+            <p class="text-sm text-gray-500 mt-1">للتواصل <a href="https://wa.me/201559087112" target="_blank" class="text-rose-600 font-bold underline hover:text-rose-800">اضغط هنا</a></p>
+        </div>
+    </div>
+
+    <!-- 3. Visitor Animation (Candle) -->
+    <div id="visitor-animation" class="view-section">
+        <!-- Floating Elements will be injected via JS -->
+        <div id="floating-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+        <div class="candle-wrapper">
+            <div class="candle">
+                <div class="wick"></div>
+                <div class="flame" id="candle-flame"></div>
+            </div>
+        </div>
+        <div class="glowing-names font-elegant" id="animated-names">حمو ونجوى</div>
+    </div>
+
+    <!-- 4. Visitor Forms -->
+    <div id="visitor-forms" class="view-section justify-start pt-20 pb-8">
+        <div class="w-full max-w-md space-y-8">
+            
+            <!-- RSVP Section -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg shadow-pink-100/50 border border-pink-50 relative">
+                <div class="absolute -top-4 right-1/2 translate-x-1/2 bg-white px-4 py-1 rounded-full border border-pink-100 text-rose-500 shadow-sm text-sm">تأكيد الحضور</div>
+                <h2 class="font-elegant text-3xl text-center mb-6 text-rose-800 mt-2">أكد حضورك لفرحنا</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">الاسم <span class="text-rose-500">*</span></label>
+                        <input type="text" id="rsvp-name" class="input-field" placeholder="أدخل اسمك الكريم" oninput="validateForms()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">رقم الهاتف <span class="text-gray-400 font-normal">(اختياري)</span></label>
+                        <input type="tel" id="rsvp-phone" class="input-field" placeholder="رقم الموبايل">
+                    </div>
+                    <button id="btn-rsvp" onclick="submitRSVP()" class="btn-rose w-full mt-2" disabled>أكد حضورك</button>
+                </div>
+            </div>
+
+            <!-- Message Section -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg shadow-pink-100/50 border border-pink-50 relative">
+                <div class="absolute -top-4 right-1/2 translate-x-1/2 bg-white px-4 py-1 rounded-full border border-pink-100 text-rose-500 shadow-sm text-sm">دفتر التهاني</div>
+                <div class="space-y-4 mt-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">اكتب اسمك <span class="text-gray-400 font-normal">(اختياري)</span></label>
+                        <input type="text" id="msg-name" class="input-field" placeholder="اسمك">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">اكتب تهنئة للعريس والعروسة <span class="text-rose-500">*</span></label>
+                        <textarea id="msg-text" rows="3" class="input-field resize-none" placeholder="اكتب أمنياتك هنا..." oninput="validateForms()"></textarea>
+                    </div>
+                    <button id="btn-msg" onclick="submitMessage()" class="btn-rose btn-outline w-full mt-2" disabled>إرسال</button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="designer-footer">
+                <p class="text-sm text-gray-500">تم التصميم بواسطة Pixel lab</p>
+                <p class="text-sm text-gray-500 mt-1">للتواصل <a href="https://wa.me/201559087112" target="_blank" class="text-rose-600 font-bold underline hover:text-rose-800">اضغط هنا</a></p>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- 5. Visitor Digital Card -->
+    <div id="visitor-card" class="view-section">
+        <div id="card-content" class="digital-card mx-auto">
+            <div class="card-border-inner"></div>
+            
+            <div class="flower-dec">🌸</div>
+            <h3 class="font-classic text-xl mb-3 text-rose-700">دعوة لحضور زفافنا</h3>
+            <h1 class="font-elegant text-5xl mb-6 text-rose-900">حمو ونجوى</h1>
+            
+            <div class="w-20 h-[2px] bg-pink-200 mx-auto mb-6"></div>
+            
+            <div class="space-y-3 text-center font-classic text-gray-700 text-lg mb-8 leading-relaxed">
+                <p>العنوان: قاعات نادي النصر</p>
+                <p>الميعاد: الجمعة 16 / 10 الساعة 3م</p>
+            </div>
+            
+            <div class="mt-auto z-10 w-full pt-4 border-t border-pink-100">
+                <p class="text-sm text-gray-500 mb-1">بانتظار تشريفكم</p>
+                <p id="display-guest-name" class="font-elegant text-2xl text-rose-800"></p>
+            </div>
+        </div>
+
+        <button onclick="downloadCard()" class="btn-rose mt-8 mb-6 w-full max-w-xs flex items-center justify-center gap-2 mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            تحميل الصورة
+        </button>
+
+        <div class="designer-footer">
+            <p class="text-sm text-gray-500">تم التصميم بواسطة Pixel lab</p>
+            <p class="text-sm text-gray-500 mt-1">للتواصل <a href="https://wa.me/201559087112" target="_blank" class="text-rose-600 font-bold underline hover:text-rose-800">اضغط هنا</a></p>
+        </div>
+    </div>
+
+    <!-- 6. Host Login -->
+    <div id="host-login" class="view-section">
+        <div class="max-w-sm w-full bg-white p-8 rounded-[2rem] shadow-xl border border-pink-100 text-center">
+            <h2 class="font-elegant text-3xl mb-6 text-rose-800">دخول العرسان</h2>
+            <div class="mb-6 text-right">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">كلمة السر</label>
+                <input type="password" id="host-password" class="input-field text-center text-lg" placeholder="***">
+                <p id="login-error" class="text-red-500 text-sm mt-2 font-semibold hidden text-center">كلمة السر خطا</p>
+            </div>
+            <button onclick="attemptLogin()" class="btn-rose w-full mx-auto block">دخول</button>
+        </div>
+        <div class="designer-footer absolute bottom-0">
+            <p class="text-sm text-gray-500">تم التصميم بواسطة Pixel lab</p>
+            <p class="text-sm text-gray-500 mt-1">للتواصل <a href="https://wa.me/201559087112" target="_blank" class="text-rose-600 font-bold underline hover:text-rose-800">اضغط هنا</a></p>
+        </div>
+    </div>
+
+    <!-- 7. Host Dashboard -->
+    <div id="host-dashboard" class="view-section justify-start pt-20">
+        <div class="w-full max-w-4xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 px-2">
+                <h1 class="font-elegant text-4xl text-rose-800">لوحة التحكم</h1>
+                <span class="text-sm bg-rose-100 text-rose-800 px-4 py-2 rounded-full font-bold shadow-sm">حمو ونجوى</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- RSVPs List -->
+                <div class="bg-white rounded-3xl shadow-lg shadow-pink-100/40 p-6 border border-pink-50">
+                    <h2 class="font-elegant text-2xl mb-4 text-rose-800 border-b border-pink-100 pb-3 flex justify-between">
+                        <span>سجل الحضور</span>
+                        <span class="bg-rose-500 text-white text-sm px-3 py-1 rounded-full" id="rsvp-count">0</span>
+                    </h2>
+                    <ul id="rsvp-list" class="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                        <li class="text-gray-500 text-sm text-center py-4">جاري التحميل...</li>
+                    </ul>
+                </div>
+
+                <!-- Messages List -->
+                <div class="bg-white rounded-3xl shadow-lg shadow-pink-100/40 p-6 border border-pink-50">
+                    <h2 class="font-elegant text-2xl mb-4 text-rose-800 border-b border-pink-100 pb-3">التهاني الواردة</h2>
+                    <div id="messages-list" class="space-y-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                        <p class="text-gray-500 text-sm text-center py-4">جاري التحميل...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="designer-footer mt-auto">
+            <p class="text-sm text-gray-500">تم التصميم بواسطة Pixel lab</p>
+            <p class="text-sm text-gray-500 mt-1">للتواصل <a href="https://wa.me/201559087112" target="_blank" class="text-rose-600 font-bold underline hover:text-rose-800">اضغط هنا</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration setup
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'wedding-app';
+        let firebaseConfig = {};
+        try {
+            firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { projectId: "dummy" };
+        } catch(e) {}
+
+        let app, db, auth;
+        let isFirebaseReady = false;
+        let viewHistory = ['main-menu'];
+        let audioStarted = false;
+
+        // Initialize Firebase
+        async function initFirebase() {
+            if(firebaseConfig && firebaseConfig.projectId !== "dummy") {
+                try {
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+                    await signInAnonymously(auth); // Must authenticate before query
+                    isFirebaseReady = true;
+                } catch(e) { console.error("Firebase init error:", e); }
+            }
+        }
+        initFirebase();
+
+        // Audio Handler
+        window.handleInitialInteraction = function() {
+            if (!audioStarted) {
+                const audio = document.getElementById('bg-music');
+                audio.play().catch(err => console.log("Audio play prevented:", err));
+                audioStarted = true;
+            }
+        };
+
+        // Navigation Logic
+        window.navigate = function(viewId, isBack = false) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            const backBtn = document.getElementById('back-btn');
+            
+            if (viewId === 'main-menu') {
+                backBtn.classList.add('hidden');
+                viewHistory = ['main-menu']; 
+            } else {
+                backBtn.classList.remove('hidden');
+                if(!isBack) viewHistory.push(viewId);
+            }
+
+            if(viewId === 'host-login') {
+                document.getElementById('host-password').value = '';
+                document.getElementById('login-error').classList.add('hidden');
+            }
+            if(viewId === 'host-dashboard') {
+                fetchDashboardData();
+            }
+        };
+
+        window.goBack = function() {
+            if (viewHistory.length > 1) {
+                viewHistory.pop(); 
+                const previousView = viewHistory[viewHistory.length - 1];
+                if (previousView === 'visitor-animation') {
+                    viewHistory.pop();
+                    navigate('visitor-start', true);
+                } else {
+                    navigate(previousView, true);
+                }
+            } else {
+                navigate('main-menu');
+            }
+        };
+
+        // Animation Logic
+        function generateFloatingElements() {
+            const container = document.getElementById('floating-container');
+            container.innerHTML = '';
+            const symbols = ['❤️', '🌸', '🌹', '💖', '✨'];
+            for(let i = 0; i < 12; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-element';
+                el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                el.style.left = `${Math.random() * 90 + 5}%`;
+                el.style.animationDelay = `${Math.random() * 3}s`;
+                el.style.fontSize = `${Math.random() * 1.5 + 1}rem`;
+                container.appendChild(el);
+            }
+        }
+
+        window.startAnimation = function() {
+            navigate('visitor-animation');
+            document.getElementById('back-btn').classList.add('hidden'); 
+            generateFloatingElements();
+            
+            const flame = document.getElementById('candle-flame');
+            const names = document.getElementById('animated-names');
+            
+            flame.classList.remove('lit');
+            names.classList.remove('show');
+            
+            setTimeout(() => flame.classList.add('lit'), 800);
+            setTimeout(() => names.classList.add('show'), 1500);
+
+            // Exactly 5 seconds duration
+            setTimeout(() => {
+                navigate('visitor-forms');
+            }, 5000);
+        };
+
+        // Forms Logic
+        window.validateForms = function() {
+            const rsvpName = document.getElementById('rsvp-name').value.trim();
+            const msgText = document.getElementById('msg-text').value.trim();
+            
+            // Enable RSVP if RSVP name is filled
+            document.getElementById('btn-rsvp').disabled = rsvpName === '';
+            // Enable Message if Message text is filled
+            document.getElementById('btn-msg').disabled = msgText === '';
+        };
+
+        function getGuestNameForCard() {
+            const rsvpName = document.getElementById('rsvp-name').value.trim();
+            const msgName = document.getElementById('msg-name').value.trim();
+            // Fallbacks for the card name
+            return rsvpName || msgName || 'ضيفنا الكريم';
+        }
+
+        window.submitRSVP = async function() {
+            const name = document.getElementById('rsvp-name').value.trim();
+            const phone = document.getElementById('rsvp-phone').value.trim();
+            const btn = document.getElementById('btn-rsvp');
+            
+            if(!name) return;
+            btn.disabled = true;
+            btn.textContent = 'جاري التأكيد...';
+
+            if(isFirebaseReady && auth.currentUser) {
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'rsvps'), {
+                        name: name,
+                        phone: phone || '',
+                        timestamp: serverTimestamp()
+                    });
+                } catch(e) { console.error("RSVP save error:", e); }
+            } else {
+                // Fallback local storage
+                let rsvps = JSON.parse(localStorage.getItem('local_rsvps') || '[]');
+                rsvps.push({name, phone, timestamp: Date.now()});
+                localStorage.setItem('local_rsvps', JSON.stringify(rsvps));
+            }
+
+            document.getElementById('display-guest-name').textContent = getGuestNameForCard();
+            btn.textContent = 'تم التأكيد';
+            setTimeout(() => navigate('visitor-card'), 500);
+        };
+
+        window.submitMessage = async function() {
+            const name = document.getElementById('msg-name').value.trim() || 'فاعل خير';
+            const msg = document.getElementById('msg-text').value.trim();
+            const btn = document.getElementById('btn-msg');
+            
+            if(!msg) return;
+            btn.disabled = true;
+            btn.textContent = 'جاري الإرسال...';
+
+            if(isFirebaseReady && auth.currentUser) {
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'messages'), {
+                        name: name,
+                        message: msg,
+                        timestamp: serverTimestamp()
+                    });
+                } catch(e) { console.error("Msg save error:", e); }
+            } else {
+                 let msgs = JSON.parse(localStorage.getItem('local_msgs') || '[]');
+                 msgs.push({name, message: msg, timestamp: Date.now()});
+                 localStorage.setItem('local_msgs', JSON.stringify(msgs));
+            }
+
+            document.getElementById('display-guest-name').textContent = getGuestNameForCard();
+            btn.textContent = 'تم الإرسال';
+            setTimeout(() => navigate('visitor-card'), 500);
+        };
+
+        window.downloadCard = function() {
+            const card = document.getElementById('card-content');
+            // Hide the border outline momentarily for cleaner download
+            const innerBorder = card.querySelector('.card-border-inner');
+            innerBorder.style.display = 'none';
+            
+            html2canvas(card, { scale: 2, backgroundColor: null }).then(canvas => {
+                innerBorder.style.display = 'block'; // restore
+                const link = document.createElement('a');
+                link.download = 'دعوة_زفاف_حمو_ونجوى.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        };
+
+        window.attemptLogin = function() {
+            const pass = document.getElementById('host-password').value;
+            if(pass === 'بحبك') {
+                navigate('host-dashboard');
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        };
+
+        // Dashboard Data Fetching
+        function fetchDashboardData() {
+            const rsvpList = document.getElementById('rsvp-list');
+            const msgList = document.getElementById('messages-list');
+            const rsvpCount = document.getElementById('rsvp-count');
+
+            if(!isFirebaseReady || !auth.currentUser) {
+                // Load from local storage if no firebase
+                const localRsvps = JSON.parse(localStorage.getItem('local_rsvps') || '[]');
+                const localMsgs = JSON.parse(localStorage.getItem('local_msgs') || '[]');
+                
+                rsvpCount.textContent = localRsvps.length;
+                rsvpList.innerHTML = localRsvps.length ? localRsvps.map(r => `<li class="flex justify-between items-center p-3 bg-pink-50 rounded-lg text-sm border border-pink-100"><span class="font-bold text-rose-800">${r.name}</span><span class="text-gray-500" dir="ltr">${r.phone}</span></li>`).join('') : '<li class="text-gray-400 text-sm">لا يوجد مدعوين حتى الآن.</li>';
+                
+                msgList.innerHTML = localMsgs.length ? localMsgs.map(m => `<div class="p-4 bg-white rounded-lg border border-pink-100 shadow-sm"><h4 class="font-bold text-rose-800 mb-1">${m.name}</h4><p class="text-gray-600 text-sm">${m.message}</p></div>`).join('') : '<p class="text-gray-400 text-sm">لا يوجد تهاني حتى الآن.</p>';
+                return;
+            }
+
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'rsvps'), (snap) => {
+                rsvpCount.textContent = snap.size;
+                if(snap.empty) { rsvpList.innerHTML = '<li class="text-gray-400 text-sm">لا يوجد مدعوين حتى الآن.</li>'; return; }
+                
+                let data = [];
+                snap.forEach(d => data.push(d.data()));
+                data.sort((a,b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
+                
+                rsvpList.innerHTML = data.map(item => `
+                    <li class="flex justify-between items-center p-3 bg-pink-50 rounded-lg text-sm md:text-base border border-pink-100">
+                        <span class="font-bold text-rose-900">${item.name}</span>
+                        <span class="text-gray-500" dir="ltr">${item.phone || '-'}</span>
+                    </li>
+                `).join('');
+            }, (e) => console.error(e));
+
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'messages'), (snap) => {
+                if(snap.empty) { msgList.innerHTML = '<p class="text-gray-400 text-sm">لا يوجد تهاني حتى الآن.</p>'; return; }
+                
+                let data = [];
+                snap.forEach(d => data.push(d.data()));
+                data.sort((a,b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
+
+                msgList.innerHTML = data.map(item => `
+                    <div class="p-4 bg-white rounded-xl border border-pink-100 shadow-sm">
+                        <h4 class="font-bold text-rose-800 mb-2">${item.name}</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed">${item.message}</p>
+                    </div>
+                `).join('');
+            }, (e) => console.error(e));
+        }
+    </script>
+</body>
+</html>
